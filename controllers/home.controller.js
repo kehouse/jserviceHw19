@@ -13,16 +13,16 @@ angular
       .then(function(weesieShutUp) {
         console.log('PLEASE', weesieShutUp);
         $scope.categories = weesieShutUp;
-        $scope.questions = getQuestions(weesieShutUp);
+        // $scope.questions = getQuestions(weesieShutUp);
     });
 
-    function getQuestions(data){
-      var dataArr = [];
-      for(var i = 0; i < 5; i++){
-        dataArr.push(data[1].data.clues[i]);
-      }
-      return dataArr
-    }
+    // function getQuestions(data){
+    //   var dataArr = [];
+    //   for(var i = 0; i < 5; i++){
+    //     dataArr.push(data[1].data.clues[i]);
+    //   }
+    //   return dataArr
+    // }
     // ApiService.getCategories()
     //   .then(function(allValues) {
     //     return allValues.then(function(data) {
