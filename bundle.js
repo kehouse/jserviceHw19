@@ -126,8 +126,19 @@ angular
 },{}],3:[function(require,module,exports){
 
 },{}],4:[function(require,module,exports){
-arguments[4][3][0].apply(exports,arguments)
-},{"dup":3}],5:[function(require,module,exports){
+angular
+  .module('jeopardy')
+  .directive('jeopardyReader', function(){
+    return {
+      templateUrl: '../templates/jeopardy-reader.html',
+      restrict: 'E',
+      scope: {
+        question: '='
+      }
+    }
+  })
+
+},{}],5:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.2
  * (c) 2010-2016 Google, Inc. http://angularjs.org
