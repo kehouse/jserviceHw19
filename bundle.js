@@ -45,14 +45,17 @@ angular
     ApiService.sixThenShits()
       .then(function(weesieShutUp) {
         console.log('PLEASE', weesieShutUp);
-        $scope.categories = weesieShutUp[0];
-        window.glob = $scope.categories;
-        $scope.newAllValues = $scope.categories.map(function(el){
-          return el.data
-        }).then(function(data){
-          $scope.hundred
-        })
+        $scope.categories = weesieShutUp;
+        $scope.questions = getQuestions(weesieShutUp);
     });
+
+    function getQuestions(data){
+      var dataArr = [];
+      for(var i = 0; i < 5; i++){
+        dataArr.push(data[1].data.clues[i]);
+      }
+      return dataArr
+    }
     // ApiService.getCategories()
     //   .then(function(allValues) {
     //     return allValues.then(function(data) {
@@ -71,13 +74,13 @@ angular
     //     return $http.get(cat.allValues)
     //   })).then(function(data) {
     //     console.log('test',data);
-      //   $scope.hundred = data.data.clues.filter(function(el) {
-      //     console.log(el);
-      //     return el.value === 100 || el.value === 200 || el.value === null;
-      //   });
-      //   $scope.hundredPts = $scope.hundred[Math.floor(Math.random() * $scope.hundred.length)]
-      //   window.globy = $scope.hundredPts
-      // })
+    //     $scope.hundred = data.data.clues.filter(function(el) {
+    //       console.log(el);
+    //       return el.value === 100 || el.value === 200 || el.value === null;
+    //     });
+    //     $scope.hundredPts = $scope.hundred[Math.floor(Math.random() * $scope.hundred.length)]
+    //     window.globy = $scope.hundredPts
+    //   })
     // })
 
 
