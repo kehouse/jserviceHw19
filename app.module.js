@@ -11,7 +11,7 @@ angular
       })
       .when('/question',{
         templateUrl: "templates/question.html",
-        controller: "QuestionController"
+        controller: "HomeController"
       })
       .when('/404',{
         template: '<h1> You messed up, loser </h1>',

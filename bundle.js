@@ -12,7 +12,7 @@ angular
       })
       .when('/question',{
         templateUrl: "templates/question.html",
-        controller: "QuestionController"
+        controller: "HomeController"
       })
       .when('/404',{
         template: '<h1> You messed up, loser </h1>',
@@ -33,21 +33,30 @@ angular
 },{"./controllers/home.controller":2,"./controllers/question.controller":3,"./directives/directive":4,"./services/api.services":9,"./services/tiny.services":10,"angular":8,"angular-route":6}],2:[function(require,module,exports){
 angular
   .module('jeopardy')
-  .controller('HomeController', function($scope, $http, $q, $location, ApiService) {
+  .controller('HomeController', function($scope, $http, $q, $location, ApiService, cacheEngine) {
 
 
 
     ApiService.getCategories()
       .then(function(catof1) {
-        console.log(catof1);
+        console.log('this is working', catof1);
       });
 
-    ApiService.sixThenShits()
-      .then(function(weesieShutUp) {
-        console.log('PLEASE', weesieShutUp);
-        $scope.categories = weesieShutUp;
-        // $scope.questions = getQuestions(weesieShutUp);
-    });
+    if(cacheEngine.get('currentQuestion')){
+      console.log("i am in cache")
+      var cache = cacheEngine.get('currentQuestion');
+      $scope.categories = cache;
+    } else {
+      ApiService.sixThenShits()
+        .then(function(weesieShutUp) {
+          console.log('PLEASE', weesieShutUp);
+          console.log('im puttin shit in cache');
+          cacheEngine.put('currentQuestion', weesieShutUp);
+          $scope.categories = weesieShutUp;
+          // $scope.questions = getQuestions(weesieShutUp);
+      });
+    }
+
 
     // function getQuestions(data){
     //   var dataArr = [];
@@ -121,7 +130,7 @@ angular
     //       });
 
     // console.log($routeParams.id);
-  })
+  });
 
 },{}],3:[function(require,module,exports){
 
@@ -31754,7 +31763,7 @@ module.exports = angular;
 },{"./angular":7}],9:[function(require,module,exports){
 angular
   .module('jeopardy')
-  .service('ApiService', function($http, $q){
+  .service('ApiService', function($http, $q, $cacheFactory){
     // var categoryOne = 'category?id=7580';
     // var categoryTwo = 'category?id=10181';
     // var categoryThree = 'category?id=11534';
@@ -31762,14 +31771,16 @@ angular
     // var categoryFive = 'category?id=365';
     // var categorySix = 'category?id=11538';
 
+    var cacheEngine = $cacheFactory('jeopardy');
+
     var url = 'http://jservice.io/api/category?id=';
 
     function getCategories(){
       var defer = $q.defer();
       var randomNumber = Math.floor(Math.random() * 1200);
       $http.get(url + randomNumber).then(function(data) {
-        defer.resolve(data);
-      })
+      defer.resolve(data);
+        })
       return defer.promise;
     }
 
@@ -31821,5 +31832,10 @@ angular
   })
 
 },{}],10:[function(require,module,exports){
-arguments[4][3][0].apply(exports,arguments)
-},{"dup":3}]},{},[1]);
+angular
+  .module('jeopardy')
+  .service('cacheEngine',function($cacheFactory) {
+    return $cacheFactory('ApiService');
+});
+
+},{}]},{},[1]);

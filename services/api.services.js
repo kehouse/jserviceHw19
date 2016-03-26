@@ -1,6 +1,6 @@
 angular
   .module('jeopardy')
-  .service('ApiService', function($http, $q){
+  .service('ApiService', function($http, $q, $cacheFactory){
     // var categoryOne = 'category?id=7580';
     // var categoryTwo = 'category?id=10181';
     // var categoryThree = 'category?id=11534';
@@ -8,14 +8,16 @@ angular
     // var categoryFive = 'category?id=365';
     // var categorySix = 'category?id=11538';
 
+    var cacheEngine = $cacheFactory('jeopardy');
+
     var url = 'http://jservice.io/api/category?id=';
 
     function getCategories(){
       var defer = $q.defer();
       var randomNumber = Math.floor(Math.random() * 1200);
       $http.get(url + randomNumber).then(function(data) {
-        defer.resolve(data);
-      })
+      defer.resolve(data);
+        })
       return defer.promise;
     }
 

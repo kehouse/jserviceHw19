@@ -1,20 +1,29 @@
 angular
   .module('jeopardy')
-  .controller('HomeController', function($scope, $http, $q, $location, ApiService) {
+  .controller('HomeController', function($scope, $http, $q, $location, ApiService, cacheEngine) {
 
 
 
     ApiService.getCategories()
       .then(function(catof1) {
-        console.log(catof1);
+        console.log('this is working', catof1);
       });
 
-    ApiService.sixThenShits()
-      .then(function(weesieShutUp) {
-        console.log('PLEASE', weesieShutUp);
-        $scope.categories = weesieShutUp;
-        // $scope.questions = getQuestions(weesieShutUp);
-    });
+    if(cacheEngine.get('currentQuestion')){
+      console.log("i am in cache")
+      var cache = cacheEngine.get('currentQuestion');
+      $scope.categories = cache;
+    } else {
+      ApiService.sixThenShits()
+        .then(function(weesieShutUp) {
+          console.log('PLEASE', weesieShutUp);
+          console.log('im puttin shit in cache');
+          cacheEngine.put('currentQuestion', weesieShutUp);
+          $scope.categories = weesieShutUp;
+          // $scope.questions = getQuestions(weesieShutUp);
+      });
+    }
+
 
     // function getQuestions(data){
     //   var dataArr = [];
@@ -88,4 +97,4 @@ angular
     //       });
 
     // console.log($routeParams.id);
-  })
+  });
