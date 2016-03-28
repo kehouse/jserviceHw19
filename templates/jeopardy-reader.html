@@ -1,24 +1,31 @@
 
-  <div class="col-sm-2">
-    <p>Category: {{ question.title }}</p>
+  <div class="col-lg-2">
+    <p>{{ question.title }}</p>
     <div class="" ng-repeat="clue in question.clues">
       <div class="">
         <button class="btn btn-primary btn-lg {{clue.id}}" data-toggle="modal" data-target="#{{clue.id}}">${{clue.value}}</button>
       </div>
 
-      <div id="{{clue.id}}" class="modal fade" role="dialog">
+      <div id="{{clue.id}}" class="modal fade" role="dialog" tabindex="-1">
         <div class="modal-dialog">
 
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title">Question</h4>
+              <h4 class="modal-title">${{clue.value}}</h4>
             </div>
-            <div class="modal-body">
-              <p>{{clue.question}}</p>
+            <div class="modal-body {{clue.id}}">
+              <p>{{clue.question}}?</p>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Submit</button>
+            <div class="answer modal-body {{clue.id}}" style="display:none;">
+              <p>The Answer Is: {{clue.answer}}</p>
+            </div>
+            <div class="modal-footer {{clue.id}}">
+              <input type="text" name="name" value="" ng-model="inputForm" placeholder="Enter Answer">
+              <button ng-click="toggleBtn(clue.id)" type="button" class="btn btn-default" btn-toggle="modal-body">Submit</button>
+            </div>
+            <div class="modal-footer {{clue.id}}" style="display:none;">
+              <button ng-click="disableBtn(clue.id)" type="button" class="btn btn-default" btn-toggle="modal-body">Close</button>
             </div>
           </div>
 

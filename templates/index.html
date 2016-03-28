@@ -2,8 +2,11 @@
   <h1>Jeopardy</h1>
 </div>
 
-<div class="col-md-2" ng-repeat="category in categories" class="">
+<div class="">
+  <h4>Score: {{score}}</h4>
+</div>
 
+<div class="col-md-2" ng-repeat="category in categories" class="">
 
   <jeopardy-reader question=category.data></jeopardy-reader>
   <!-- <button class="btn btn-default"><jeopardy-reader question=category.data.clues[1]></jeopardy-reader></button>
