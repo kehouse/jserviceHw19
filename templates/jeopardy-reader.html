@@ -3,7 +3,7 @@
     <p>Category: {{ question.title }}</p>
     <div class="" ng-repeat="clue in question.clues">
       <div class="">
-        <button class="btn btn-primary{{clue.id}}button-value" data-toggle="modal" data-target="#{{clue.id}}">${{clue.value}}</button>
+        <button class="btn btn-primary btn-lg {{clue.id}}" data-toggle="modal" data-target="#{{clue.id}}">${{clue.value}}</button>
       </div>
 
       <div id="{{clue.id}}" class="modal fade" role="dialog">
@@ -11,7 +11,7 @@
 
           <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
               <h4 class="modal-title">Question</h4>
             </div>
             <div class="modal-body">
