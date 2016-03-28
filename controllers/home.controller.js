@@ -1,8 +1,8 @@
+var _ = require('underscore');
+
 angular
   .module('jeopardy')
   .controller('HomeController', function($scope, $http, $q, $location, ApiService, cacheEngine) {
-
-
 
     ApiService.getCategories()
       .then(function(catof1) {
@@ -20,6 +20,15 @@ angular
           console.log('im puttin shit in cache');
           cacheEngine.put('currentQuestion', weesieShutUp);
           $scope.categories = weesieShutUp;
+          $scope.categories.forEach(function(el){
+            if(el.data.clues_count > 5){
+              el.data.clues = _.first((el.data.clues), 5);
+            }
+            for(i=0; i<5; i++){
+              el.data.clues[i].value = 200 * (i + 1);
+              // Note: Frank helped me with this and he got help from Brandon 
+            }
+          })
           // $scope.questions = getQuestions(weesieShutUp);
       });
     }

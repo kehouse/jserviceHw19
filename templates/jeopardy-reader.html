@@ -1,11 +1,28 @@
 
-  <div class="">
-    <p>Question {{ question.value }}</p>
-    <p>{{ question.question }}</p>
+  <div class="col-sm-2">
+    <p>Category: {{ question.title }}</p>
+    <div class="" ng-repeat="clue in question.clues">
+      <div class="">
+        <button class="btn btn-primary{{clue.id}}button-value" data-toggle="modal" data-target="#{{clue.id}}">${{clue.value}}</button>
+      </div>
+
+      <div id="{{clue.id}}" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Question</h4>
+            </div>
+            <div class="modal-body">
+              <p>{{clue.question}}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Submit</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
   </div>
-
-
-  <!-- <p>Question 200: {{ category.$$state.value.data.clues[0].question }}</p>
-  <p>Question 300: {{ category.$$state.value.data.clues[0].question }}</p>
-  <p>Question 400: {{ category.$$state.value.data.clues[0].question }}</p>
-  <p>Question 500: {{ category.$$state.value.data.clues[0].question }}</p> -->
