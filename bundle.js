@@ -3,33 +3,27 @@ var angular = require('angular');
 var angularRoute = require('angular-route');
 
 angular
-  .module('jeopardy',['ngRoute'])
+  .module('jeopardyapp',[
+    'ngRoute',
+    'jeopardy'
+  ])
   .config(function($routeProvider) {
     $routeProvider
       .when('/',{
-        templateUrl: "templates/index.html",
-        controller: "HomeController"
-      })
-      .when('/question',{
-        templateUrl: "templates/question.html",
+        templateUrl: "main.html",
         controller: "HomeController"
       })
       .when('/404',{
-        template: '<h1> You messed up, loser </h1>',
-        controller: 'WangController'
+        template: '<h1> You messed up, loser </h1>'
       })
       .otherwise({
          redirectTo: '/404'
       })
   })
 
-  require('./controllers/home.controller');
-  require('./services/api.services');
-  require('./services/tiny.services');
-  // require('./services/cacheEngineService');
-  require('./directives/directive');
+  require('./jeopardyApp');
 
-},{"./controllers/home.controller":2,"./directives/directive":3,"./services/api.services":9,"./services/tiny.services":10,"angular":7,"angular-route":5}],2:[function(require,module,exports){
+},{"./jeopardyApp":4,"angular":11,"angular-route":9}],2:[function(require,module,exports){
 var _ = require('underscore');
 
 angular
@@ -134,12 +128,12 @@ angular
     // console.log($routeParams.id);
   });
 
-},{"underscore":8}],3:[function(require,module,exports){
+},{"underscore":12}],3:[function(require,module,exports){
 angular
   .module('jeopardy')
   .directive('jeopardyReader', function(){
     return {
-      templateUrl: '../templates/jeopardy-reader.html',
+      templateUrl: '../../jeopardyApp/templates/jeopardy-reader.html',
       restrict: 'E',
       scope: {
         question: '='
@@ -164,6 +158,109 @@ angular
   })
 
 },{}],4:[function(require,module,exports){
+require('./jeopardy.module');
+require('./controllers/home.controller');
+require('./services/api.services');
+require('./services/tiny.services');
+require('./directives/directive');
+
+},{"./controllers/home.controller":2,"./directives/directive":3,"./jeopardy.module":5,"./services/api.services":6,"./services/tiny.services":7}],5:[function(require,module,exports){
+var angular = require('angular');
+var angularRoute = require('angular-route');
+
+angular
+  .module('jeopardy',['ngRoute'])
+  .config(function($routeProvider) {
+    $routeProvider
+      .when('/jeopardy',{
+        templateUrl: "../jeopardyApp/templates/index.html",
+        controller: "HomeController"
+      })
+      .when('/question',{
+        templateUrl: "../templates/question.html",
+        controller: "HomeController"
+      })
+  })
+
+},{"angular":11,"angular-route":9}],6:[function(require,module,exports){
+angular
+  .module('jeopardy')
+  .service('ApiService', function($http, $q, $cacheFactory){
+    // var categoryOne = 'category?id=7580';
+    // var categoryTwo = 'category?id=10181';
+    // var categoryThree = 'category?id=11534';
+    // var categoryFour = 'category?id=752';
+    // var categoryFive = 'category?id=365';
+    // var categorySix = 'category?id=11538';
+
+    var cacheEngine = $cacheFactory('jeopardy');
+
+    var url = 'http://jservice.io/api/category?id=';
+
+    function getCategories(){
+      var defer = $q.defer();
+      var randomNumber = Math.floor(Math.random() * 1200);
+      $http.get(url + randomNumber).then(function(data) {
+      defer.resolve(data);
+        })
+      return defer.promise;
+    }
+
+    function getData() {
+      return $q.all([getCategories(),getCategories(),getCategories(),getCategories(),getCategories(),getCategories()])
+    }
+
+
+      // var allUrls = [categorySix,categoryFive,categoryFour,categoryThree,categoryTwo,categoryOne]
+      // return $q.all([
+      //   allUrls.map(function(data) {
+      //     var defer = $q.defer();
+      //     $http.get(url + data).then(function(catAndQuest) {
+      //       defer.resolve(catAndQuest)
+      //     })
+      //     return defer.promise;
+      //   })
+      // ]).then(function(data) {
+      //   console.log("HELLO", data);
+      // })
+    // function getCategoryOne() {
+    //   return $http.get(url + categoryOne);
+    // };
+    // function getCategoryTwo() {
+    //   return $http.get(url + categoryTwo);
+    // };
+    // function getCategoryThree() {
+    //   return $http.get(url + categoryThree);
+    // };
+    // function getCategoryFour() {
+    //   return $http.get(url + categoryFour);
+    // };
+    // function getCategoryFive() {
+    //   return $http.get(url + categoryFive);
+    // };
+    // function getCategorySix() {
+    //   return $http.get(url + categorySix);
+    // };
+    return {
+      // getCategoryOne: getCategoryOne,
+      // getCategoryTwo: getCategoryTwo,
+      // getCategoryThree: getCategoryThree,
+      // getCategoryFour: getCategoryFour,
+      // getCategoryFive: getCategoryFive,
+      // getCategorySix: getCategorySix,
+      getCategories: getCategories,
+      getData: getData
+    }
+  })
+
+},{}],7:[function(require,module,exports){
+angular
+  .module('jeopardy')
+  .service('cacheEngine',function($cacheFactory) {
+    return $cacheFactory('ApiService');
+});
+
+},{}],8:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.2
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -1187,11 +1284,11 @@ function ngViewFillContentFactory($compile, $controller, $route) {
 
 })(window, window.angular);
 
-},{}],5:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 require('./angular-route');
 module.exports = 'ngRoute';
 
-},{"./angular-route":4}],6:[function(require,module,exports){
+},{"./angular-route":8}],10:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.2
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -31772,11 +31869,11 @@ $provide.value("$locale", {
 })(window, document);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],7:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":6}],8:[function(require,module,exports){
+},{"./angular":10}],12:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -33325,83 +33422,5 @@ module.exports = angular;
     });
   }
 }.call(this));
-
-},{}],9:[function(require,module,exports){
-angular
-  .module('jeopardy')
-  .service('ApiService', function($http, $q, $cacheFactory){
-    // var categoryOne = 'category?id=7580';
-    // var categoryTwo = 'category?id=10181';
-    // var categoryThree = 'category?id=11534';
-    // var categoryFour = 'category?id=752';
-    // var categoryFive = 'category?id=365';
-    // var categorySix = 'category?id=11538';
-
-    var cacheEngine = $cacheFactory('jeopardy');
-
-    var url = 'http://jservice.io/api/category?id=';
-
-    function getCategories(){
-      var defer = $q.defer();
-      var randomNumber = Math.floor(Math.random() * 1200);
-      $http.get(url + randomNumber).then(function(data) {
-      defer.resolve(data);
-        })
-      return defer.promise;
-    }
-
-    function getData() {
-      return $q.all([getCategories(),getCategories(),getCategories(),getCategories(),getCategories(),getCategories()])
-    }
-
-
-      // var allUrls = [categorySix,categoryFive,categoryFour,categoryThree,categoryTwo,categoryOne]
-      // return $q.all([
-      //   allUrls.map(function(data) {
-      //     var defer = $q.defer();
-      //     $http.get(url + data).then(function(catAndQuest) {
-      //       defer.resolve(catAndQuest)
-      //     })
-      //     return defer.promise;
-      //   })
-      // ]).then(function(data) {
-      //   console.log("HELLO", data);
-      // })
-    // function getCategoryOne() {
-    //   return $http.get(url + categoryOne);
-    // };
-    // function getCategoryTwo() {
-    //   return $http.get(url + categoryTwo);
-    // };
-    // function getCategoryThree() {
-    //   return $http.get(url + categoryThree);
-    // };
-    // function getCategoryFour() {
-    //   return $http.get(url + categoryFour);
-    // };
-    // function getCategoryFive() {
-    //   return $http.get(url + categoryFive);
-    // };
-    // function getCategorySix() {
-    //   return $http.get(url + categorySix);
-    // };
-    return {
-      // getCategoryOne: getCategoryOne,
-      // getCategoryTwo: getCategoryTwo,
-      // getCategoryThree: getCategoryThree,
-      // getCategoryFour: getCategoryFour,
-      // getCategoryFive: getCategoryFive,
-      // getCategorySix: getCategorySix,
-      getCategories: getCategories,
-      getData: getData
-    }
-  })
-
-},{}],10:[function(require,module,exports){
-angular
-  .module('jeopardy')
-  .service('cacheEngine',function($cacheFactory) {
-    return $cacheFactory('ApiService');
-});
 
 },{}]},{},[1]);
