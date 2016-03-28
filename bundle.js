@@ -24,48 +24,41 @@ angular
   })
 
   require('./controllers/home.controller');
-  require('./controllers/question.controller');
   require('./services/api.services');
   require('./services/tiny.services');
   // require('./services/cacheEngineService');
   require('./directives/directive');
 
-},{"./controllers/home.controller":2,"./controllers/question.controller":3,"./directives/directive":4,"./services/api.services":10,"./services/tiny.services":11,"angular":8,"angular-route":6}],2:[function(require,module,exports){
+},{"./controllers/home.controller":2,"./directives/directive":3,"./services/api.services":9,"./services/tiny.services":10,"angular":7,"angular-route":5}],2:[function(require,module,exports){
 var _ = require('underscore');
 
 angular
   .module('jeopardy')
-  .controller('HomeController', function($scope, $http, $q, $location, ApiService, cacheEngine) {
-
-    ApiService.getCategories()
-      .then(function(catof1) {
-        console.log('this is working', catof1);
-      });
+  .controller('HomeController', function($scope, $http, $q, $location, $rootScope, ApiService, cacheEngine) {
+    $rootScope.score = 0;
 
     if(cacheEngine.get('currentQuestion')){
-      console.log("i am in cache")
+      // console.log("i am in cache")
       var cache = cacheEngine.get('currentQuestion');
       $scope.categories = cache;
     } else {
-      ApiService.sixThenShits()
-        .then(function(weesieShutUp) {
-          console.log('PLEASE', weesieShutUp);
-          console.log('im puttin shit in cache');
-          cacheEngine.put('currentQuestion', weesieShutUp);
-          $scope.categories = weesieShutUp;
+      ApiService.getData()
+        .then(function(game) {
+          // console.log('im puttin shit in cache');
+          cacheEngine.put('currentQuestion', game);
+          $scope.categories = game;
           $scope.categories.forEach(function(el){
             if(el.data.clues_count > 5){
               el.data.clues = _.first((el.data.clues), 5);
             }
             for(i=0; i<5; i++){
               el.data.clues[i].value = 200 * (i + 1);
-              // Note: Frank helped me with this and he got help from Brandon 
+              // Note: Frank helped me with this and he got help from Brandon
             }
           })
           // $scope.questions = getQuestions(weesieShutUp);
       });
     }
-
 
     // function getQuestions(data){
     //   var dataArr = [];
@@ -141,9 +134,7 @@ angular
     // console.log($routeParams.id);
   });
 
-},{"underscore":9}],3:[function(require,module,exports){
-
-},{}],4:[function(require,module,exports){
+},{"underscore":8}],3:[function(require,module,exports){
 angular
   .module('jeopardy')
   .directive('jeopardyReader', function(){
@@ -154,6 +145,13 @@ angular
         question: '='
       },
       controller: function($rootScope, $scope){
+        $scope.addScore = function(input, answer, val){
+           if(input === answer){
+           $rootScope.score += val;
+           } else {
+             $rootScope.score -= val;
+           }
+         };
         $scope.toggleBtn = function(id){
           $('div.' + id).toggle();
         }
@@ -165,7 +163,7 @@ angular
     }
   })
 
-},{}],5:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.2
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -1189,11 +1187,11 @@ function ngViewFillContentFactory($compile, $controller, $route) {
 
 })(window, window.angular);
 
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 require('./angular-route');
 module.exports = 'ngRoute';
 
-},{"./angular-route":5}],7:[function(require,module,exports){
+},{"./angular-route":4}],6:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.2
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -31774,11 +31772,11 @@ $provide.value("$locale", {
 })(window, document);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":7}],9:[function(require,module,exports){
+},{"./angular":6}],8:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -33328,7 +33326,7 @@ module.exports = angular;
   }
 }.call(this));
 
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 angular
   .module('jeopardy')
   .service('ApiService', function($http, $q, $cacheFactory){
@@ -33352,7 +33350,7 @@ angular
       return defer.promise;
     }
 
-    function sixThenShits() {
+    function getData() {
       return $q.all([getCategories(),getCategories(),getCategories(),getCategories(),getCategories(),getCategories()])
     }
 
@@ -33395,11 +33393,11 @@ angular
       // getCategoryFive: getCategoryFive,
       // getCategorySix: getCategorySix,
       getCategories: getCategories,
-      sixThenShits: sixThenShits
+      getData: getData
     }
   })
 
-},{}],11:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 angular
   .module('jeopardy')
   .service('cacheEngine',function($cacheFactory) {

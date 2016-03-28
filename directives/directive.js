@@ -8,6 +8,13 @@ angular
         question: '='
       },
       controller: function($rootScope, $scope){
+        $scope.addScore = function(input, answer, val){
+           if(input === answer){
+           $rootScope.score += val;
+           } else {
+             $rootScope.score -= val;
+           }
+         };
         $scope.toggleBtn = function(id){
           $('div.' + id).toggle();
         }

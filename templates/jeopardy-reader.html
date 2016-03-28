@@ -21,11 +21,15 @@
               <p>The Answer Is: {{clue.answer}}</p>
             </div>
             <div class="modal-footer {{clue.id}}">
-              <input type="text" name="name" value="" ng-model="inputForm" placeholder="Enter Answer">
-              <button ng-click="toggleBtn(clue.id)" type="button" class="btn btn-default" btn-toggle="modal-body">Submit</button>
+              <form role="form-group" ng-submit="addScore(userInput, clue.answer, clue.value)">
+              <input type="text" name="name" value="" ng-model="userInput" placeholder="Enter Answer"/>
+              <button ng-click="toggleBtn(clue.id)" type="submit" class="btn btn-default" btn-toggle="modal-body">Submit</button>
+              </form>
             </div>
             <div class="modal-footer {{clue.id}}" style="display:none;">
-              <button ng-click="disableBtn(clue.id)" type="button" class="btn btn-default" btn-toggle="modal-body">Close</button>
+              <form role="form-group" ng-submit="addScore(userInput, clue.answer, clue.value)">
+              <button ng-click="disableBtn(clue.id)" type="submit" class="btn btn-default" btn-toggle="modal-body">Close</button>
+              </form>
             </div>
           </div>
 

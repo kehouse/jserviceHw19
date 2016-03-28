@@ -21,7 +21,7 @@ angular
       return defer.promise;
     }
 
-    function sixThenShits() {
+    function getData() {
       return $q.all([getCategories(),getCategories(),getCategories(),getCategories(),getCategories(),getCategories()])
     }
 
@@ -64,6 +64,6 @@ angular
       // getCategoryFive: getCategoryFive,
       // getCategorySix: getCategorySix,
       getCategories: getCategories,
-      sixThenShits: sixThenShits
+      getData: getData
     }
   })
