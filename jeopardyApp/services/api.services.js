@@ -17,6 +17,12 @@ angular
       var randomNumber = Math.floor(Math.random() * 1200);
       $http.get(url + randomNumber).then(function(data) {
       defer.resolve(data);
+        // data.data.forEach(function(el) {
+        //     if(el.question !==) {
+        //       defer.resolve(data);
+        //     } else {
+        //       defer.reject(data);
+        //     }
         })
       return defer.promise;
     }

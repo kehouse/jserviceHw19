@@ -9,7 +9,7 @@ angular
       },
       controller: function($rootScope, $scope){
         $scope.addScore = function(input, answer, val){
-           if(input === answer){
+           if(input === answer.toLowerCase().replace(/(<([^>]+)>)/ig,"").replace(/\\\//g,"")){
            $rootScope.score += val;
            } else {
              $rootScope.score -= val;
