@@ -1,9 +1,9 @@
 
-  <div class="col-lg-2">
-    <p>{{ question.title }}</p>
+  <div class="catCol col-md-2">
+    <div class="catTitle col-md-12"><h4>{{ question.title }}</h4></div>
     <div class="" ng-repeat="clue in question.clues | limitTo:5">
       <div class="">
-        <button class="btn btn-primary btn-lg {{clue.id}}" data-toggle="modal" data-target="#{{clue.id}}">${{clue.value * 2}}</button>
+        <button class="btn clue-button {{clue.id}}" data-toggle="modal" data-target="#{{clue.id}}">${{clue.value * 2}}</button>
       </div>
 
       <div id="{{clue.id}}" class="modal fade" role="dialog" tabindex="-1">
